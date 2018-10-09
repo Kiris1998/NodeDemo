@@ -39,15 +39,31 @@ const router = new Router({
 })
 
 router.get('/userInfo',async (ctx,next) => {
-  let val = null
-  const data = await User.find({username: 'Kiris'})
-  const result = {
-    statusCode: 200,
-    res: data
-  }
-  ctx.body = result
-})
+    let val = null
+    const data = await User.find({username: 'Kiris'})
+    const result = {
+      statusCode: 200,
+      res: data
+    }
+    ctx.body = result
+    next()
+  })
+router.post('/userInofo',async (ctx,next) => {
+    let postData = ctx.request.body
+    console.log(postData)
+    ctx.body = '200'
+  })
+
+// app.use((ctx,next) => {
+//   if (ctx.url === '/api/userInfo' && ctx.method === 'POST') {
+//     let postData = ctx.request.body
+//     console.log(postData)
+//   }  
+// })
+
+
 app.use(router.routes())
+  //  .use(router.allowedMethods())
 
 app.listen(8080,(ctx) => {
   console.log('Running in 8080')
