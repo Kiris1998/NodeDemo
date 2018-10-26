@@ -1,4 +1,6 @@
 import Router from 'koa-router'
+import fs from 'fs'
+import path from 'path'
 import User from '../mongo'
 
 const router = new Router({
@@ -66,6 +68,20 @@ router.post('/editInfo',async (ctx,next) => {
     statusCode: 200,
     mes: 'Successfully',
     res: editInfo
+  }
+  ctx.body = result
+  next()
+})
+router.post('/uploadFile',async (ctx,next) => {
+  const file = ctx.request.files.file
+  const reader = fs.createReadStream(file.path)
+  let filePath = path.join(__dirname,`../public/upload/${file.name}`)
+  const writeStream = fs.createWriteStream(filePath)
+  reader.pipe(writeStream)
+  const result = {
+    statusCode: 200,
+    mes: 'Upload Successfully',
+    res: `localhost:8080/upload/${file.name}`
   }
   ctx.body = result
 })
